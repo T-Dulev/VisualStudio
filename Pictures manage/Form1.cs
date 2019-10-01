@@ -13,7 +13,7 @@ namespace Pictures_manage
 {
     public partial class Form1 : Form
     {
-        string[] groups = { "Тишо", "Бойко", "Ради", "Мими", "Георги", "Вики", "BB8"};
+        string[] groups = { "Тишо", "Бойко", "Ради", "Мими", "Георги", "Вики", "BB8"}; // имена на папките, трябва да се параметризира
         public long lCurrID;
         public string[] gFiles;
 
@@ -25,14 +25,14 @@ namespace Pictures_manage
         private void Form1_Load(object sender, EventArgs e)
         {
             Button bb;
-            Button[] b = new Button[10];
+            Button[] b = new Button[20];
             
             for (int i = 0; i < groups.Length; i++)
             {
                 bb= new Button();
                 b[i] = bb;
                 bb.Name  =  groups[i];
-                bb.Text=bb.Name;
+                bb.Text = bb.Name;
 
                 bb.Left = 880;
                 bb.Top = i * 24 + 130;
@@ -58,7 +58,7 @@ namespace Pictures_manage
         }
 
         private void LoadPicture(long ID)
-        {
+        {   // зарежда поредната снимка
             lCurrID = ID;
             lCurrFile.Text = gFiles[ID];
             pic.Load(lCurrFile.Text);
@@ -66,8 +66,7 @@ namespace Pictures_manage
         }
 
         private void But_Click(object sender, EventArgs e)
-        {
-            //копира показаната картинка в избраната папка
+        {   // копира показаната картинка в избраната папка
             string sFullPath;
             string sCurName;
 
@@ -80,7 +79,6 @@ namespace Pictures_manage
 
             sCurName=Path.GetFileName(lCurrFile.Text);
             File.Copy(Path.Combine(lPath.Text, sCurName), Path.Combine(sFullPath, sCurName));
-
         }
 
         private void bRight_Click(object sender, EventArgs e)
@@ -104,6 +102,10 @@ namespace Pictures_manage
             if (e.KeyCode == Keys.X)
             {
                 bRight.PerformClick();
+            }
+            if (e.KeyCode == Keys.C)
+            { 
+                //тук трябва да се трие снимката
             }
 
         }
