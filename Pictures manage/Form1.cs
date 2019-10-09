@@ -6,14 +6,15 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
-namespace Pictures_manage
+using System.Configuration;
+namespace PicturesManage
 {
     public partial class Form1 : Form
     {
-        string[] groups = { "Тишо", "Бойко", "Ради", "Мими", "Георги", "Вики", "BB8"}; // имена на папките, трябва да се параметризира
+        //string[] groups = { "Тишо", "Бойко", "Ради", "Мими", "Георги", "Вики", "BB8" }; // имена на папките, трябва да се параметризира
+        string[] groups = new string[20];
+        string groupsList = "";
         public long lCurrID;
         public string[] gFiles;
 
@@ -24,23 +25,45 @@ namespace Pictures_manage
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Button bb;
-            Button[] b = new Button[20];
-            
-            for (int i = 0; i < groups.Length; i++)
+            //Button bb;
+            //Button[] b = new Button[20];
+
+            //for (int i = 0; i < groups.Length; i++)
+            //{
+            //    bb = new Button();
+            //    b[i] = bb;
+            //    bb.Name = groups[i];
+            //    bb.Text = bb.Name;
+
+            //    bb.Left = 880;
+            //    bb.Top = i * 24 + 145;
+            //    bb.Width = 130;
+
+            //    Controls.Add(b[i]);
+
+            //    b[i].Click += new System.EventHandler(this.But_Click);
+            //}
+
+            // зареждане на групите
+            var appSettings = ConfigurationManager.AppSettings;
+
+            if (appSettings.Count != 0)
             {
-                bb= new Button();
-                b[i] = bb;
-                bb.Name  =  groups[i];
-                bb.Text = bb.Name;
+                foreach (var key in appSettings.AllKeys)
+                {
+                    //Console.WriteLine("Key: {0} Value: {1}", key, appSettings[key]);
+                    listBoxProfiles.Items.Add(key);
+                }
 
-                bb.Left = 880;
-                bb.Top = i * 24 + 130;
-                bb.Width = 130;
-
-                Controls.Add(b[i]);
-
-                b[i].Click += new System.EventHandler(this.But_Click);
+                if (listBoxProfiles.Items.Count == 0)
+                {
+                    listBoxProfiles.Items.Add("-- няма групи --");
+                }
+                else
+                {
+                    listBoxProfiles.SetSelected(0, true);
+                    btnLoadList.PerformClick();
+                }
             }
         }
 
@@ -62,28 +85,32 @@ namespace Pictures_manage
             lCurrID = ID;
             lCurrFile.Text = gFiles[ID];
             pic.Load(lCurrFile.Text);
-            lProgress.Text = (lCurrID+1) + "/" + gFiles.Length;
+            lProgress.Text = (lCurrID + 1) + "/" + gFiles.Length;
         }
 
         private void But_Click(object sender, EventArgs e)
         {   // копира показаната картинка в избраната папка
-            string sFullPath;
-            string sCurName;
-
-            Button clickedButton = (Button)sender;
-            sFullPath = Path.Combine(lPath.Text, clickedButton.Name);
-            if (!Directory.Exists(sFullPath))
+            if (lPath.Text != "")
             {
-                Directory.CreateDirectory(sFullPath);
-            }
+                string sFullPath;
+                string sCurName;
 
-            sCurName=Path.GetFileName(lCurrFile.Text);
-            File.Copy(Path.Combine(lPath.Text, sCurName), Path.Combine(sFullPath, sCurName));
+                Button clickedButton = (Button)sender;
+                sFullPath = Path.Combine(lPath.Text, clickedButton.Name);
+                if (!Directory.Exists(sFullPath))
+                {
+                    Directory.CreateDirectory(sFullPath);
+                }
+
+                sCurName = Path.GetFileName(lCurrFile.Text);
+                if (sCurName != "")
+                    File.Copy(Path.Combine(lPath.Text, sCurName), Path.Combine(sFullPath, sCurName));
+            }
         }
 
         private void bRight_Click(object sender, EventArgs e)
         {
-            if (lCurrID < gFiles.Length-1)
+            if (lCurrID < gFiles.Length - 1)
                 LoadPicture(++lCurrID);
         }
 
@@ -104,7 +131,7 @@ namespace Pictures_manage
                 bRight.PerformClick();
             }
             if (e.KeyCode == Keys.C)
-            { 
+            {
                 //тук трябва да се трие снимката
             }
 
@@ -113,6 +140,108 @@ namespace Pictures_manage
         private void lPath_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnNewList_Click(object sender, EventArgs e)
+        {
+            string newList = "";
+            Class1.InputBox("Папки", "Въведи име на нова група от папки", ref newList);
+            listBoxProfiles.Items.Add(newList);
+
+            //string sAttr;
+            //sAttr = ConfigurationManager.AppSettings.Get("Key0");
+
+            Class1.AddUpdateAppSettings(newList, "");
+
+        }
+
+
+        private void buttonDeleteList_Click(object sender, EventArgs e)
+        {
+            string selectedItem = (string)listBoxProfiles.SelectedItem;
+            listBoxProfiles.Items.Remove(selectedItem);
+
+            var appSettings = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            appSettings.AppSettings.Settings.Remove(selectedItem);
+            appSettings.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
+
+        private void btnLoadList_Click(object sender, EventArgs e)
+        {
+            // изтриване на бутоните от предишно избраната група
+            for (int i = 0; i < groups.Length; i++)
+            {
+                if (groups[i] != null && groups[i] != "")
+                {
+                    Control[] findButton = Controls.Find(groups[i], false);
+                    Controls.Remove(findButton[0]);
+                }
+            }
+
+            // зареждане на бутоните от избраната група
+            var appSettings = ConfigurationManager.AppSettings;
+            string selectedItem = (string)listBoxProfiles.SelectedItem;
+            string buttonsList = appSettings[selectedItem];
+
+            panelSelectedGroup.Text = selectedItem;
+            groupsList = buttonsList;
+            groups = buttonsList.Split(',');
+
+            if (groups.Length != 0 && groups[0] != "")
+            {
+                for (int i = 0; i < groups.Length; i++)
+                {
+                    var bb = new Button();
+                    bb.Name = groups[i];
+                    bb.Text = bb.Name;
+
+                    bb.Left = 880;
+                    bb.Top = i * 24 + 145;
+                    bb.Width = 130;
+
+                    Controls.Add(bb);
+
+                    bb.Click += new System.EventHandler(this.But_Click);
+                }
+            }
+
+        }
+
+        private void buttonNewFolder_Click(object sender, EventArgs e)
+        {
+            string newFolder = "";
+            Class1.InputBox("Папки", "Въведи име на нова папка в групата", ref newFolder);
+
+            if (newFolder != "")
+            {
+                if (groupsList == "")
+                {
+                    groupsList = newFolder;
+                }
+                else
+                {
+                    groupsList += "," + newFolder;
+                }
+
+                // запазване на списъка с папки
+                Class1.AddUpdateAppSettings(panelSelectedGroup.Text, groupsList);
+
+                groups = groupsList.Split(',');
+
+                // зареждане на нов бутон
+                var bb = new Button();
+                bb.Name = newFolder;
+                bb.Text = bb.Name;
+
+                bb.Left = 880;
+                bb.Top = (groups.Length - 1) * 24 + 145;
+                bb.Width = 130;
+
+                Controls.Add(bb);
+
+                bb.Click += new System.EventHandler(this.But_Click);
+            }
         }
     }
 }
