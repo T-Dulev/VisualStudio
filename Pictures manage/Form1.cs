@@ -8,12 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Configuration;
+using System.Reflection;
+
 namespace PicturesManage
 {
     public partial class Form1 : Form
     {
         //string[] groups = { "Тишо", "Бойко", "Ради", "Мими", "Георги", "Вики", "BB8" }; // имена на папките, трябва да се параметризира
-        string[] groups = new string[20];
+        string[] groupButtons = new string[20];
         string groupsList = "";
         public long lCurrID;
         public string[] gFiles;
@@ -25,24 +27,8 @@ namespace PicturesManage
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //Button bb;
-            //Button[] b = new Button[20];
 
-            //for (int i = 0; i < groups.Length; i++)
-            //{
-            //    bb = new Button();
-            //    b[i] = bb;
-            //    bb.Name = groups[i];
-            //    bb.Text = bb.Name;
-
-            //    bb.Left = 880;
-            //    bb.Top = i * 24 + 145;
-            //    bb.Width = 130;
-
-            //    Controls.Add(b[i]);
-
-            //    b[i].Click += new System.EventHandler(this.But_Click);
-            //}
+            labelVersion.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             // зареждане на групите
             var appSettings = ConfigurationManager.AppSettings;
@@ -170,11 +156,11 @@ namespace PicturesManage
         private void btnLoadList_Click(object sender, EventArgs e)
         {
             // изтриване на бутоните от предишно избраната група
-            for (int i = 0; i < groups.Length; i++)
+            for (int i = 0; i < groupButtons.Length; i++)
             {
-                if (groups[i] != null && groups[i] != "")
+                if (groupButtons[i] != null && groupButtons[i] != "")
                 {
-                    Control[] findButton = Controls.Find(groups[i], false);
+                    Control[] findButton = Controls.Find(groupButtons[i], false);
                     Controls.Remove(findButton[0]);
                 }
             }
@@ -186,14 +172,14 @@ namespace PicturesManage
 
             panelSelectedGroup.Text = selectedItem;
             groupsList = buttonsList;
-            groups = buttonsList.Split(',');
+            groupButtons = buttonsList.Split(',');
 
-            if (groups.Length != 0 && groups[0] != "")
+            if (groupButtons.Length != 0 && groupButtons[0] != "")
             {
-                for (int i = 0; i < groups.Length; i++)
+                for (int i = 0; i < groupButtons.Length; i++)
                 {
                     var bb = new Button();
-                    bb.Name = groups[i];
+                    bb.Name = groupButtons[i];
                     bb.Text = bb.Name;
 
                     bb.Left = 880;
@@ -227,7 +213,7 @@ namespace PicturesManage
                 // запазване на списъка с папки
                 Class1.AddUpdateAppSettings(panelSelectedGroup.Text, groupsList);
 
-                groups = groupsList.Split(',');
+                groupButtons = groupsList.Split(',');
 
                 // зареждане на нов бутон
                 var bb = new Button();
@@ -235,7 +221,7 @@ namespace PicturesManage
                 bb.Text = bb.Name;
 
                 bb.Left = 880;
-                bb.Top = (groups.Length - 1) * 24 + 145;
+                bb.Top = (groupButtons.Length - 1) * 24 + 145;
                 bb.Width = 130;
 
                 Controls.Add(bb);

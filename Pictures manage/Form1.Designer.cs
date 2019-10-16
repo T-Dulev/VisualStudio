@@ -41,6 +41,7 @@
             this.btnLoadList = new System.Windows.Forms.Button();
             this.buttonNewFolder = new System.Windows.Forms.Button();
             this.panelSelectedGroup = new System.Windows.Forms.Label();
+            this.labelVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pic)).BeginInit();
             this.SuspendLayout();
             // 
@@ -173,11 +174,21 @@
             this.panelSelectedGroup.TabIndex = 15;
             this.panelSelectedGroup.Text = "panelSelectedGroup";
             // 
+            // labelVersion
+            // 
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.Location = new System.Drawing.Point(1176, 809);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(0, 13);
+            this.labelVersion.TabIndex = 16;
+            this.labelVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1216, 822);
+            this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.panelSelectedGroup);
             this.Controls.Add(this.buttonNewFolder);
             this.Controls.Add(this.btnLoadList);
@@ -219,6 +230,7 @@
         private System.Windows.Forms.Button btnLoadList;
         internal System.Windows.Forms.Button buttonNewFolder;
         private System.Windows.Forms.Label panelSelectedGroup;
+        private System.Windows.Forms.Label labelVersion;
 
     }
 }
