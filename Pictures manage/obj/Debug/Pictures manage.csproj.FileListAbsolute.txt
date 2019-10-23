@@ -3,7 +3,6 @@ H:\VS2013\004\Pictures manage\Pictures manage\bin\Debug\Pictures manage.exe.mani
 H:\VS2013\004\Pictures manage\Pictures manage\bin\Debug\Pictures manage.application
 H:\VS2013\004\Pictures manage\Pictures manage\bin\Debug\Pictures manage.exe
 H:\VS2013\004\Pictures manage\Pictures manage\bin\Debug\Pictures manage.pdb
-H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\PicturesManage.Form1.resources
 H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\PicturesManage.Properties.Resources.resources
 H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\Pictures manage.csproj.GenerateResource.Cache
 H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\Pictures manage.TrustInfo.xml
@@ -11,3 +10,5 @@ H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\Pictures manage.exe.mani
 H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\Pictures manage.application
 H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\Pictures manage.exe
 H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\Pictures manage.pdb
+H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\PicturesManage.MainForm.resources
+H:\VS2013\004\Pictures manage\Pictures manage\obj\Debug\Pictures manage.csprojResolveAssemblyReference.cache
